@@ -9,5 +9,5 @@ RUN unzip stockfish.zip && rm stockfish.zip
 RUN mv stockfish_* engines/stockfish && chmod +x engines/stockfish
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
-# Add the "--matchmaking" flag to start the matchmaking mode.
+# Add the "--matchmaking" flag to start the matchmaking mode
 CMD python3 user_interface.py --non_interactive --matchmaking
