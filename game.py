@@ -47,6 +47,7 @@ class Game(Thread):
                     else:
                         self.api.send_move(self.game_id, uci_move, offer_draw)
             elif event['type'] == 'gameState':
+                self.ping_counter = 0
                 updated = self.lichess_game.update(event)
 
                 if self.lichess_game.status != Game_Status.STARTED:
@@ -80,7 +81,7 @@ class Game(Thread):
             elif event['type'] == 'ping':
                 self.ping_counter += 1
 
-                if self.ping_counter >= 7 and self.lichess_game.is_abortable() and not self.lichess_game.is_our_turn():
+                if self.ping_counter >= 10 and self.lichess_game.is_abortable() and not self.lichess_game.is_our_turn():
                     self.api.abort_game(self.game_id)
                     self.abortion_counter += 1
 
@@ -92,7 +93,7 @@ class Game(Thread):
             else:
                 print(event)
 
-        self.lichess_game.quit_engine()
+        self.lichess_game.end_game()
 
     @retry
     def _watch_game_stream(self) -> None:
